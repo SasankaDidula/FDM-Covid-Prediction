@@ -1,47 +1,24 @@
-<!doctype html>
-<html>
-<style>
-form {
-    margin: auto;
-    width: 35%;
-}
+<!DOCTYPE html>
+<html lang="en">
 
-.result {
-    margin: auto;
-    width: 35%;
-    border: 1px solid #ccc;
-}
-</style>
+    <head>
+        <meta charset="utf-8">
+        <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-<head>
-    <title>Bike Usage Model</title>
-</head>
-<form action="{{ url_for('main') }}" method="POST">
-    <fieldset>
-        <legend>Input values:</legend>
-        Temperature:
-        <input name="temperature" type="number" required>
-        <br>
-        <br> Humidity:
-        <input name="humidity" type="number" required>
-        <br>
-        <br> Windspeed:
-        <input name="windspeed" type="number" required>
-        <br>
-        <br>
-        <input type="submit">
-    </fieldset>
-</form>
-<br>
-<div class="result" align="center">
-    {% if result %}
-    	{% for variable, value in original_input.items() %}
-    		<b>{{ variable }}</b> : {{ value }}
-    	{% endfor %}
-		<br>
-    	<br> Predicted number of bikes in use:
-   		<p style="font-size:50px">{{ result }}</p>
-    {% endif %}
-</div>
+    </head>
+    <body>
+        <p>
+            {{ div|safe }}
+        </p>
+        <p>
+            {{ MeanError|safe }}
+        </p>
 
+        <img src="{{url_for('static', filename=script ) }}" width="500" height="600"/>
+
+    </body>
 </html>
