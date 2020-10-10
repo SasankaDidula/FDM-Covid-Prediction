@@ -146,6 +146,7 @@ def predict_deaths_country(countryIndex, date):
 def predict():
     features = [formValues for formValues in request.form.values()]
     print(features)
+
     if int(features[1] == 0):
         Output = predict_cases_country(int(features[0]), features[2])
     elif int(features[1] == 0):
@@ -154,11 +155,13 @@ def predict():
         Output = predict_cases_country(int(features[0]), features[2])
 
     kwargs = {'script': Output[0],
-              'div': 'RBF model:' + str(Output[1]) + ', Linear model:' + str(Output[2]) + ', Polynomial model:' + str(
-                  Output[3]),
-              'MeanError': 'RBF model Error:' + str(Output[4]) + ', Linear model Error:' + str(
-                  Output[5]) + ', Polynomial model Error:' + str(Output[6])}
+              'div': 'RBF model:' + str(Output[1]) + ', Linear model:' + str(Output[2]) + ', Polynomial model:'
+                     + str(Output[3]),
+              'MeanError': 'RBF model Error:' + str(Output[4]) + ', Linear model Error:' + str(Output[5])
+                           + ',Polynomial model Error:' + str(Output[6])}
     return render_template('main.html', **kwargs)
+    
+
 
 
 @app.route('/')
