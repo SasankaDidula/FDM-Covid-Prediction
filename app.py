@@ -156,8 +156,15 @@ def predict_recovered_country(countryIndex, date):
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    countries = ["Afghanistan", "Aland Islands", "Albania", "Algeria", "American Samoa", "Andorra", "Angola",
-                 "Anguilla", "Antarctica",
+    countries = ["Afghanistan",
+                 "Aland Islands",
+                 "Albania",
+                 "Algeria",
+                 "American Samoa",
+                 "Andorra",
+                 "Angola",
+                 "Anguilla",
+                 "Antarctica",
                  "Antigua and Barbuda",
                  "Argentina",
                  "Armenia",
