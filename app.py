@@ -1,12 +1,12 @@
-from flask import Flask, request, render_template, abort, Response
 import matplotlib.pyplot as plt
-import pandas as pd
 import numpy as np
+import pandas as pd
+from flask import Flask, request, render_template
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, PolynomialFeatures
 from sklearn.svm import SVR
-from sklearn.linear_model import LinearRegression
-from sklearn.pipeline import Pipeline
-from sklearn.metrics import mean_squared_error
 
 app = Flask(__name__)
 
@@ -21,8 +21,8 @@ def preprocessing(url):
     print("Column\t\t\t\t\t Null Values%")
 
     for x in Df_dataset:
-        nullCount = Df_dataset[x].isnull().sum();
-        nullPercent = nullCount * 100 / (TotalObjects)
+        nullCount = Df_dataset[x].isnull().sum()
+        nullPercent = nullCount * 100 / TotalObjects
         if nullCount > 0 and nullPercent > 30:
             col_num = col_num + 1
             Df_dataset.drop(x, axis=1, inplace=True)
@@ -84,7 +84,8 @@ def predict_cases(dates, cases, predictDate):
 
 
 def predict_cases_country(countryIndex, date):
-    url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
+    url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data' \
+          '/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv '
     df1_new = preprocessing(url)
     data = convert_date(df1_new, countryIndex, date)
     predicted_cases = predict_cases(data[0], data[1], data[2])
@@ -116,7 +117,8 @@ def predict_deaths(dates, deaths, predictDate):
 
 
 def predict_deaths_country(countryIndex, date):
-    url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv'
+    url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data' \
+          '/csse_covid_19_time_series/time_series_covid19_deaths_global.csv '
     df1_new = preprocessing(url)
     data = convert_date(df1_new, countryIndex, date)
     predicted_deaths = predict_deaths(data[0], data[1], data[2])
@@ -147,7 +149,8 @@ def predict_recovered(dates, recovered, x):
 
 
 def predict_recovered_country(countryIndex, date):
-    url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv'
+    url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data' \
+          '/csse_covid_19_time_series/time_series_covid19_recovered_global.csv '
     df1_new = preprocessing(url)
     data = convert_date(df1_new, countryIndex, date)
     predicted_recovered = predict_recovered(data[0], data[1], data[2])
@@ -412,21 +415,24 @@ def predict():
                   'MeanError': str(Output[3]) + ', ' + str(
                       Output[4]) + ', ' + str(Output[5]),
                   'country': str(countries[int(features[0])]),
-                  'predict': str(predictType[int(features[1])])}
+                  'predict': str(predictType[int(features[1])]),
+                  'date': features[2]}
 
     elif int(features[1]) == 2:
         Output = predict_deaths_country(int(features[0]), features[2])
         kwargs = {'div': 'Linear Regression model:' + str(Output[0]),
                   'MeanError': str(Output[1]),
                   'country': str(countries[int(features[0])]),
-                  'predict': str(predictType[int(features[1])])}
+                  'predict': str(predictType[int(features[1])]),
+                  'date': features[2]}
 
     else:
         Output = predict_recovered_country(int(features[0]), features[2])
         kwargs = {'div': 'Polynomial Regression model:' + str(Output[0]),
-                  'MeanError': str(Output[1]), 'country': str(countries[int(features[0])]),
-                  'predict': str(predictType[int(features[1])])
-                  }
+                  'MeanError': str(Output[1]),
+                  'country': str(countries[int(features[0])]),
+                  'predict': str(predictType[int(features[1])]),
+                  'date': features[2]}
 
     return render_template('main.html', **kwargs)
 
@@ -434,6 +440,13 @@ def predict():
 @app.route('/')
 def home():
     return render_template('index.html')
+
+
+@app.after_request
+def add_header(response):
+    response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
+    response.headers['Cache-Control'] = 'max-age=0'
+    return response
 
 
 if __name__ == '__main__':
