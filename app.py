@@ -39,12 +39,18 @@ def convert_date(df1_new, countryIndex, date):
     float_date = pd.to_datetime(date).toordinal()
     val = df1_new[countryIndex]
     date = []
+    Total_cases = []
 
     for x in val.index.values:
         y = pd.to_datetime(x).toordinal()
         date.append(y)
 
-    Total_cases = val.values
+    for x in val.values:
+        if x < 0:
+            Total_cases.append(0)
+        else:
+            Total_cases.append(x)
+
     return date, Total_cases, [float_date]
 
 
@@ -129,6 +135,8 @@ def predict_recovered(dates, recovered, x):
     dates = np.reshape(dates, (len(dates), 1))  # convert to 1xn dimension
     x = np.reshape(x, (len(x), 1))
 
+    MeanErrorLin = ''
+
     # Fitting Polynomial Regression to the dataset
     polynominal_regg = PolynomialFeatures(degree=3)
     x_Polynom = polynominal_regg.fit_transform(dates)
@@ -137,7 +145,10 @@ def predict_recovered(dates, recovered, x):
     leniar_regg.fit(x_Polynom, recovered)
     # Visualizing the Polymonial Regression results
     plt.scatter(dates, recovered, c='k', label='Data')
-    plt.plot(dates, leniar_regg.predict(x_Polynom), c='b', label='RBF model')
+    plt.plot(dates, leniar_regg.predict(x_Polynom), c='b', label='Polynomial Regression model')
+    plt.xlabel("Duration")
+    plt.ylabel("recovered patients")
+    plt.title('Polynomial Regression model')
 
     MeanErrorLin = 'Mean Error Polynomial Regression model: ' + str(
         mean_squared_error(recovered, leniar_regg.predict(x_Polynom)))

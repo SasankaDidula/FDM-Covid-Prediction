@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html >
 <head>
-  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Deployment Tutorial 1</title>
     <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
-<body>
+<body style="background-image: {{ url_for('static', filename='img/covid.jpeg') }}; background-size: cover">
   <div class="col-lg-5 col-md-5 col-sm-12 justify-content-center row mx-auto">
     
       <h1 class="text-center mt-5 pb-5">Daily Cases Prediction</h1>
