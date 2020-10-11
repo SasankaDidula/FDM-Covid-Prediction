@@ -3,3 +3,4 @@ gunicorn
 numpy
 matplotlib
 sklearn
+pandas
